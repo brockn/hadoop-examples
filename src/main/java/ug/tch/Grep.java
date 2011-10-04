@@ -48,10 +48,12 @@ public class Grep extends Configured implements Tool {
 
 
  public int run(String[] args) throws Exception {
+   if(args.length < 2) {
+     throw new Exception("Usage: " + this.getClass().getName() + " output term input [input...]");
+   }
    Configuration conf = getConf();
-   Path input = new Path(args[0]);
-   Path output = new Path(args[1]);
-   conf.set("grep.term", args[2]);
+   Path output = new Path(args[0]);
+   conf.set("grep.term", args[1]);
    JobConf job = new JobConf(conf);
    job.setJarByClass(Grep.class);
    job.setMapperClass(InnerMapper.class);
@@ -61,7 +63,10 @@ public class Grep extends Configured implements Tool {
    job.setMapOutputKeyClass(Text.class);
    job.setMapOutputValueClass(NullWritable.class);
    FileOutputFormat.setOutputPath(job, output);
-   FileInputFormat.addInputPath(job, input);
+   for (int i = 1; i < args.length; i++) {
+     Path input = new Path(args[i]);
+     FileInputFormat.addInputPath(job, input);
+   }
    JobClient.runJob(job);
    return 0;
  }
