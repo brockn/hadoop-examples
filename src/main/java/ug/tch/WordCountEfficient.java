@@ -34,7 +34,7 @@ public class WordCountEfficient extends Configured implements Tool {
     job.setOutputKeyClass(LongWritable.class);
     job.setOutputValueClass(Text.class);
     job.setCombinerClass(LongSumReducer.class);
-    job.setReducerClass(LongSumReducerInvertedOutput.class);
+    job.setReducerClass(LongSumInvertedOutputReducer.class);
     FileOutputFormat.setOutputPath(job, output);
     for (int i = 1; i < args.length; i++) {
       Path input = new Path(args[i]);

@@ -14,7 +14,7 @@ import org.apache.hadoop.mapred.Reporter;
  * For illustrative purposes only, should use 
  * org.apache.hadoop.mapred.lib.LongSumReducer
  */
-public class LongSumReducerInvertedOutput extends MapReduceBase implements
+public class LongSumInvertedOutputReducer extends MapReduceBase implements
     Reducer<Text, LongWritable, LongWritable, Text> {
   private LongWritable outputValue = new LongWritable();
 

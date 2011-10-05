@@ -12,7 +12,7 @@ import org.junit.Test;
 public class TestWordCountInefficient {
   LongWritable offset = new LongWritable(0);
   Mapper<LongWritable, Text, Text, LongWritable> mapper = new WordCountMapper();
-  Reducer<Text, LongWritable, LongWritable, Text> reducer = new LongSumReducerInvertedOutput();
+  Reducer<Text, LongWritable, LongWritable, Text> reducer = new LongSumInvertedOutputReducer();
   MapDriver<LongWritable, Text, Text, LongWritable> driver = 
     new MapDriver<LongWritable, Text, Text, LongWritable>(mapper);
   MapReduceDriver<LongWritable, Text, Text, LongWritable, LongWritable, Text> mapReduceDriver = 

@@ -13,7 +13,7 @@ import org.junit.Test;
 public class TestWordCountEfficient {
   LongWritable offset = new LongWritable(0);
   Mapper<LongWritable, Text, Text, LongWritable> mapper = new WordCountMapper();
-  Reducer<Text, LongWritable, LongWritable, Text> reducer = new LongSumReducerInvertedOutput();
+  Reducer<Text, LongWritable, LongWritable, Text> reducer = new LongSumInvertedOutputReducer();
   Reducer<Text, LongWritable, Text, LongWritable> combiner = new LongSumReducer<Text>(); 
   MapDriver<LongWritable, Text, Text, LongWritable> mapDriver = 
     new MapDriver<LongWritable, Text, Text, LongWritable>(mapper);

@@ -32,7 +32,7 @@ public class WordCountInefficient extends Configured implements Tool {
     job.setMapOutputValueClass(LongWritable.class);
     job.setOutputKeyClass(LongWritable.class);
     job.setOutputValueClass(Text.class);
-    job.setReducerClass(LongSumReducerInvertedOutput.class);
+    job.setReducerClass(LongSumInvertedOutputReducer.class);
     FileOutputFormat.setOutputPath(job, output);
     for (int i = 1; i < args.length; i++) {
       Path input = new Path(args[i]);
