@@ -22,6 +22,10 @@ import org.apache.hadoop.mapred.Reporter;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
+/**
+ * Sort a tab separated file by the key, which must
+ * be numeric. Implements basic `sort -n'
+ */
 public class KeyValueTextNumericSort extends Configured implements Tool {
 
   public static enum Counters {

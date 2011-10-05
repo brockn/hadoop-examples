@@ -4,6 +4,7 @@ import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.FileInputFormat;
@@ -18,13 +19,17 @@ import org.apache.hadoop.mapred.lib.IdentityReducer;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
+/**
+ * Find lines that match a particular pattern 
+ * Implements basic `grep -F'
+ */
 public class Grep extends Configured implements Tool {
 
   public static enum Counters {
     NO_MATCH
   }
  public static class InnerMapper extends MapReduceBase implements
- Mapper<Object, Text, Text, NullWritable> {
+ Mapper<LongWritable, Text, Text, NullWritable> {
    String term;
    @Override
    public void configure(JobConf job) {
@@ -32,12 +37,11 @@ public class Grep extends Configured implements Tool {
      if(term == null) {
        throw new RuntimeException("grep.term config param not found");
      }
-     term = term.toLowerCase();
    }
-   public void map(Object key, Text value,
+   public void map(LongWritable key, Text value,
        OutputCollector<Text, NullWritable> output, Reporter report)
    throws IOException {
-     String line = value.toString().toLowerCase();
+     String line = value.toString();
      if(line.indexOf(term) >= 0) {
        output.collect(value, NullWritable.get());
      } else {
@@ -63,7 +67,7 @@ public class Grep extends Configured implements Tool {
    job.setMapOutputKeyClass(Text.class);
    job.setMapOutputValueClass(NullWritable.class);
    FileOutputFormat.setOutputPath(job, output);
-   for (int i = 1; i < args.length; i++) {
+   for (int i = 2; i < args.length; i++) {
      Path input = new Path(args[i]);
      FileInputFormat.addInputPath(job, input);
    }
@@ -73,8 +77,7 @@ public class Grep extends Configured implements Tool {
 
 
  public static void main(String[] args) throws Exception {
-   Grep tool = new Grep();
-   int rc = ToolRunner.run(tool, args);
+   int rc = ToolRunner.run(new Grep(), args);
    System.exit(rc);
  }
 }
