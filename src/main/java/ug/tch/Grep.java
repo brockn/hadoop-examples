@@ -64,8 +64,8 @@ public class Grep extends Configured implements Tool {
    job.setMapOutputKeyClass(Text.class);
    job.setMapOutputValueClass(NullWritable.class);
    job.setReducerClass(IdentityReducer.class);
-   job.setMapOutputKeyClass(Text.class);
-   job.setMapOutputValueClass(NullWritable.class);
+   job.setOutputKeyClass(Text.class);
+   job.setOutputValueClass(NullWritable.class);
    FileOutputFormat.setOutputPath(job, output);
    for (int i = 2; i < args.length; i++) {
      Path input = new Path(args[i]);

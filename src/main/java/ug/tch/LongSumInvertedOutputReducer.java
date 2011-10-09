@@ -10,9 +10,9 @@ import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reducer;
 import org.apache.hadoop.mapred.Reporter;
 
-/**
- * For illustrative purposes only, should use 
- * org.apache.hadoop.mapred.lib.LongSumReducer
+/** 
+ * Same as org.apache.hadoop.mapred.lib.LongSumReducer
+ * only outputs (count, word) as opposed to (word, count)
  */
 public class LongSumInvertedOutputReducer extends MapReduceBase implements
     Reducer<Text, LongWritable, LongWritable, Text> {

@@ -1,4 +1,5 @@
-add jar /usr/lib/hive/lib/hive-contrib-0.7.1-cdh3u1.jar;
+
+ADD JAR /usr/lib/hive/lib/hive-contrib-0.7.1-cdh3u1.jar;
 
 CREATE EXTERNAL TABLE access_log (
   host STRING,
@@ -17,11 +18,33 @@ WITH SERDEPROPERTIES (
 )
 STORED AS TEXTFILE LOCATION '/user/tchug/access_log/input';
 
-SELECT * FROM access_log WHERE reqeust LIKE '%=http%';
 
+SELECT * FROM access_log WHERE request LIKE '%=http%';
+
+
+INSERT OVERWRITE DIRECTORY '/user/tchug/access_log/output-bad'
+SELECT * FROM access_log WHERE request LIKE '%=http%';
+
+INSERT OVERWRITE DIRECTORY 
+'/user/tchug/access_log/output-day-result'
 SELECT day, COUNT(1) AS cnt FROM 
-(SELECT regexp_extract(time, '^\\[(\\d+/\\w+)/', 1) as day FROM access_log) t1
-GROUP BY day ORDER BY cnt DESC LIMIT 10;
+(
+  SELECT regexp_extract(time, '^\\[(\\d+/\\w+)/', 1) 
+  AS day FROM access_log
+) t1
+GROUP BY day 
+SORT BY cnt DESC 
+LIMIT 10;
 
-SELECT host, agent, COUNT(1) AS cnt FROM access_log
-GROUP BY host, agent ORDER BY cnt DESC LIMIT 10;
+
+INSERT OVERWRITE DIRECTORY
+'/user/tchug/access_log/output-session-result'
+SELECT
+  host, SUBSTRING(agent, 0, 5) AS agent,
+  request, status, size
+FROM
+access_log
+SORT BY host, agent;
+
+
+
